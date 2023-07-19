@@ -18,7 +18,22 @@ const useField = (type) => {
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
-  useEffect(() => {})
+  useEffect(() => {
+    console.log(name);
+    axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`).then((res) => {
+      //res["found"] = true; 
+      console.log(res)
+      const data = {
+        name: res.data.name.common,
+        capital: res.data.capital,
+        population: res.data.population,
+        flag: res.data.flags.png
+      }
+      const ret = { data, found: true }
+      console.log(ret)
+      setCountry(ret);
+    })
+  }, [name])
 
   return country
 }
@@ -40,8 +55,8 @@ const Country = ({ country }) => {
     <div>
       <h3>{country.data.name} </h3>
       <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <div>population {country.data.population}</div>
+      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`} />
     </div>
   )
 }
